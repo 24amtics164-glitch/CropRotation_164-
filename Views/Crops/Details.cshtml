@@ -1,0 +1,101 @@
+@model CropRotation_164.Models.Crop
+@{
+    ViewData["Title"] = "Crop Profile - " + Model.CropName;
+}
+
+<div class="container py-4">
+    <div class="card shadow-sm border-0 border-top border-4 border-success mb-4 bg-white">
+        <div class="card-header bg-light py-3 d-flex justify-content-between align-items-center">
+            <h4 class="mb-0 fw-bold text-success">
+                <i class="bi bi-flower1 me-2"></i>@Model.CropName
+            </h4>
+            <span class="badge bg-secondary fs-6">Crop ID: #@Model.Id</span>
+        </div>
+        <div class="card-body p-4">
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="p-3 bg-light rounded text-center">
+                        <div class="text-muted small text-uppercase fw-bold">Botanical Family</div>
+                        <div class="fs-6 fw-bold text-success mt-2">@Model.Family</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 bg-light rounded text-center">
+                        <div class="text-muted small text-uppercase fw-bold">Growing Season</div>
+                        <div class="fs-6 fw-bold text-primary mt-2">@Model.Season</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 bg-light rounded text-center">
+                        <div class="text-muted small text-uppercase fw-bold">Growth Cycle</div>
+                        <div class="display-6 fw-bold text-dark">@Model.DurationInDays</div>
+                        <div class="small text-muted">Days to Harvest</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 bg-light rounded text-center">
+                        <div class="text-muted small text-uppercase fw-bold">Yield Expectation</div>
+                        <div class="fs-6 fw-bold text-dark mt-2">@Model.EstimatedYieldPerAcre</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agronomic Rotation Role -->
+            <div class="card bg-success bg-opacity-10 border-0 p-3 mb-4">
+                <h6 class="fw-bold text-success mb-1">Agronomic Function in Rotation:</h6>
+                <p class="mb-0 text-dark">@Model.NutrientDemand</p>
+            </div>
+
+            <!-- Active Plots where this crop is scheduled -->
+            <h5 class="fw-bold mb-3 border-bottom pb-2">
+                <i class="bi bi-calendar-check me-1 text-agri"></i>Plots Currently or Previously Planted with @Model.CropName
+            </h5>
+
+            @if (!Model.RotationPlans.Any())
+            {
+                <div class="alert alert-light border small text-muted">
+                    This crop is not currently assigned to any active field rotation schedule.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover align-middle mb-0 text-center">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Field Plot</th>
+                                <th>Soil Type</th>
+                                <th>Cycle</th>
+                                <th>Planting Date</th>
+                                <th>Expected Harvest</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var plan in Model.RotationPlans)
+                            {
+                                <tr>
+                                    <td class="fw-bold">@plan.Field?.PlotName</td>
+                                    <td><span class="badge bg-secondary">@plan.Field?.SoilType</span></td>
+                                    <td>@plan.SeasonYear</td>
+                                    <td>@plan.PlantingDate.ToString("dd MMM yyyy")</td>
+                                    <td>@plan.ExpectedHarvestDate.ToString("dd MMM yyyy")</td>
+                                    <td>
+                                        <span class="badge @(plan.Status == "In Progress" ? "bg-warning text-dark" : "bg-success")">
+                                            @plan.Status
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            <div class="d-flex justify-content-between pt-4 mt-3 border-top">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning px-4 fw-bold">Edit Crop</a>
+                <a asp-action="Index" class="btn btn-outline-secondary">Back to Crops List</a>
+            </div>
+        </div>
+    </div>
+</div>

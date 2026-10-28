@@ -1,0 +1,71 @@
+@model CropRotation_164.Models.RotationPlan
+@{
+    ViewData["Title"] = "Rotation Cycle #" + Model.Id + " Details";
+}
+
+<div class="container py-4">
+    <div class="card shadow-sm border-0 border-top border-4 border-success mb-4 bg-white">
+        <div class="card-header bg-light py-3 d-flex justify-content-between align-items-center">
+            <h4 class="mb-0 fw-bold text-success">
+                <i class="bi bi-arrow-repeat me-2"></i>Rotation Cycle #@Model.Id &mdash; @Model.SeasonYear
+            </h4>
+            <span class="badge @(Model.Status == "In Progress" ? "bg-warning text-dark" : Model.Status == "Harvested" ? "bg-success" : "bg-info text-dark") fs-6">
+                @Model.Status
+            </span>
+        </div>
+        <div class="card-body p-4">
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="p-3 bg-light rounded text-center">
+                        <div class="text-muted small text-uppercase fw-bold">Field / Plot</div>
+                        <div class="fs-5 fw-bold text-dark mt-2">@Model.Field?.PlotName</div>
+                        <div class="small text-muted">@Model.Field?.SoilType &bull; @Model.Field?.AreaInAcres Ac</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 bg-light rounded text-center">
+                        <div class="text-muted small text-uppercase fw-bold">Crop Planted</div>
+                        <div class="fs-5 fw-bold text-success mt-2">@Model.Crop?.CropName</div>
+                        <div class="small text-muted">@Model.Crop?.Family</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 bg-light rounded text-center">
+                        <div class="text-muted small text-uppercase fw-bold">Cycle Timeline</div>
+                        <div class="small fw-bold text-dark mt-2">@Model.PlantingDate.ToString("dd MMM yyyy")</div>
+                        <div class="small text-muted">to @Model.ExpectedHarvestDate.ToString("dd MMM yyyy")</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 bg-light rounded text-center">
+                        <div class="text-muted small text-uppercase fw-bold">Rotation Health Index</div>
+                        <div class="display-6 fw-bold @(Model.RotationBenefitScore >= 90 ? "text-success" : "text-primary")">
+                            @Model.RotationBenefitScore%
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agronomic Details -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <div class="p-3 border rounded bg-light">
+                        <h6 class="fw-bold text-muted small text-uppercase mb-1">Soil Condition Prior:</h6>
+                        <p class="mb-0 fw-semibold text-dark">@Model.SoilConditionBefore</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 border rounded bg-light">
+                        <h6 class="fw-bold text-muted small text-uppercase mb-1">Recommended Bio-Fertilizer / Compost:</h6>
+                        <p class="mb-0 fw-semibold text-dark">@Model.RecommendedFertilizer</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between pt-3 border-top">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning px-4 fw-bold">Edit Cycle</a>
+                <a asp-action="Index" class="btn btn-outline-secondary">Back to Cycles List</a>
+            </div>
+        </div>
+    </div>
+</div>

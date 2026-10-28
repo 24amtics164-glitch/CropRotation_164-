@@ -1,0 +1,92 @@
+@{
+    ViewData["Title"] = "Scientific Crop Rotation Principles";
+}
+
+<div class="container py-4">
+    <div class="card shadow-sm border-0 mb-4 bg-agri rounded-3">
+        <div class="card-body p-4 text-center">
+            <h1 class="display-6 fw-bold mb-2">Scientific Crop Rotation Advisory Guide</h1>
+            <p class="lead mb-0">Principles for sustainable soil regeneration, nutrient cycling, and biological pest disruption</p>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <!-- Principle 1 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100 border-start border-4 border-success">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="fs-2 me-3">🌱</span>
+                        <h4 class="fw-bold mb-0 text-success">1. Alternate Nitrogen Fixers &amp; Feeders</h4>
+                    </div>
+                    <p class="text-muted">
+                        Legume crops (Soybean, Chickpea, Green Gram) possess symbiotic <em>Rhizobium</em> root nodules that convert atmospheric nitrogen into bioavailable soil nitrogen.
+                    </p>
+                    <div class="alert alert-light border small">
+                        <strong>Recommended Succession:</strong> Plant heavy nutrient-demanding cereals (Wheat, Maize) directly after harvesting legumes to cut synthetic chemical fertilizer needs by up to 40%.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Principle 2 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100 border-start border-4 border-primary">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="fs-2 me-3">🌿</span>
+                        <h4 class="fw-bold mb-0 text-primary">2. Alternate Rooting Depths</h4>
+                    </div>
+                    <p class="text-muted">
+                        Shallow-rooted plants draw nutrients and moisture exclusively from the top 6&ndash;12 inches of soil, whereas deep taproot crops tap subsoil reserves down to 3&ndash;5 feet.
+                    </p>
+                    <div class="alert alert-light border small">
+                        <strong>Recommended Succession:</strong> Follow shallow fibrous-rooted crops (Wheat, Rice) with deep taproot species (Mustard, Chickpea, Pigeon Pea) to prevent subsoil compaction and hardpan formation.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Principle 3 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100 border-start border-4 border-warning">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="fs-2 me-3">🛡️</span>
+                        <h4 class="fw-bold mb-0 text-warning text-dark">3. Botanical Family Break (Pest Disruption)</h4>
+                    </div>
+                    <p class="text-muted">
+                        Pathogens, nematodes, and insect larvae adapt to host crops. Planting the same botanical family consecutively fosters chronic pest build-up and disease recurrence.
+                    </p>
+                    <div class="alert alert-light border small">
+                        <strong>Rule:</strong> Never follow a cereal with a cereal or a solanaceous crop with solanaceae. Use brassica crops (Mustard) as natural biofumigants.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Principle 4 -->
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100 border-start border-4 border-info">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="fs-2 me-3">☀️</span>
+                        <h4 class="fw-bold mb-0 text-info">4. Summer Cover Cropping (Zaid Season)</h4>
+                    </div>
+                    <p class="text-muted">
+                        Leaving arable fields bare during scorching summer months induces severe moisture loss and topsoil erosion.
+                    </p>
+                    <div class="alert alert-light border small">
+                        <strong>Recommendation:</strong> Sow short-duration green manure crops (Mung bean, Sunn hemp) for 60&ndash;65 days in the summer window (Zaid) to mulch the ground and add 15&ndash;20 tons of organic biomass per hectare.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-3">
+        <a asp-controller="RotationPlans" asp-action="Create" class="btn btn-agri px-4 py-2 fw-bold">
+            Apply Principles: Create Rotation Plan &rarr;
+        </a>
+    </div>
+</div>

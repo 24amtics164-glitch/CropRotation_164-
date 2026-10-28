@@ -1,0 +1,86 @@
+@model CropRotation_164.Models.Field
+@{
+    ViewData["Title"] = "Edit Field Plot";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-warning text-dark py-3">
+                    <h4 class="mb-0 fw-bold">✎ Edit Field / Plot Profile</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit" method="post" novalidate>
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="Id" />
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <!-- ID -->
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Field ID (System Generated)</label>
+                            <input class="form-control bg-light" value="#@Model.Id" disabled />
+                        </div>
+
+                        <!-- Plot Name -->
+                        <div class="mb-3">
+                            <label asp-for="PlotName" class="form-label fw-bold"></label>
+                            <input asp-for="PlotName" class="form-control" />
+                            <span asp-validation-for="PlotName" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Soil Type & Area Row -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="SoilType" class="form-label fw-bold"></label>
+                                <select asp-for="SoilType" class="form-select">
+                                    <option value="Alluvial Loam">Alluvial Loam</option>
+                                    <option value="Black Clay Loam">Black Clay Loam</option>
+                                    <option value="Red Sandy Loam">Red Sandy Loam</option>
+                                    <option value="Laterite Soil">Laterite Soil</option>
+                                    <option value="Silty Clay">Silty Clay</option>
+                                </select>
+                                <span asp-validation-for="SoilType" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="AreaInAcres" class="form-label fw-bold"></label>
+                                <input asp-for="AreaInAcres" type="number" step="0.1" min="0.1" max="1000" class="form-control" />
+                                <span asp-validation-for="AreaInAcres" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Location -->
+                        <div class="mb-3">
+                            <label asp-for="Location" class="form-label fw-bold"></label>
+                            <input asp-for="Location" class="form-control" />
+                            <span asp-validation-for="Location" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Nutrient Status -->
+                        <div class="mb-4">
+                            <label asp-for="CurrentNutrientStatus" class="form-label fw-bold"></label>
+                            <select asp-for="CurrentNutrientStatus" class="form-select">
+                                <option value="Balanced Organic">Balanced Organic</option>
+                                <option value="Nitrogen-Rich (Post-Legume)">Nitrogen-Rich (Post-Legume)</option>
+                                <option value="Nitrogen-Depleted">Nitrogen-Depleted</option>
+                                <option value="High Phosphorus, Moderate Nitrogen">High Phosphorus, Moderate Nitrogen</option>
+                                <option value="Compacted / Needs Aeration">Compacted / Needs Aeration</option>
+                            </select>
+                            <span asp-validation-for="CurrentNutrientStatus" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button type="submit" class="btn btn-warning px-4 fw-bold">Update Field</button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

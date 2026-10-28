@@ -1,0 +1,176 @@
+@model IEnumerable<CropRotation_164.Models.RotationPlan>
+@{
+    ViewData["Title"] = "Crop Rotation Cycles";
+}
+
+<div class="container py-4">
+    <!-- Header Card -->
+    <div class="card shadow-sm border-0 mb-4 bg-agri rounded-3">
+        <div class="card-body p-4 text-center">
+            <h1 class="display-6 fw-bold mb-2">Crop Rotation Cycles &amp; Scheduling</h1>
+            <p class="lead mb-0">Multi-season crop sequence tracker, soil health benefit scores, and cycle statuses</p>
+        </div>
+    </div>
+
+    <!-- Alert Notifications -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm mb-4" role="alert">
+            <span class="fs-5 me-2">✓</span> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm mb-4" role="alert">
+            <span class="fs-5 me-2">⚠</span> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Toolbar: Filters & Create -->
+    <div class="card shadow-sm border-0 mb-4 bg-white">
+        <div class="card-body">
+            <div class="row g-3 align-items-center justify-content-between">
+                <div class="col-md-8">
+                    <form asp-action="Index" method="get" class="row g-2">
+                        <div class="col-md-5">
+                            <select name="fieldId" asp-items="ViewBag.FieldsList" class="form-select">
+                                <option value="">-- All Field Plots --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <select name="status" class="form-select">
+                                <option value="">-- All Cycle Statuses --</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Planned">Planned</option>
+                                <option value="Harvested">Harvested</option>
+                                <option value="Rotated">Rotated</option>
+                            </select>
+                        </div>
+                        <div class="col-md-auto">
+                            <button type="submit" class="btn btn-outline-success">Filter</button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">Reset</a>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-auto text-end">
+                    <a asp-action="Create" class="btn btn-agri fw-bold px-4">
+                        + Plan New Rotation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rotation Plans Table -->
+    <div class="card shadow-sm border-0 bg-white">
+        <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold">Active Rotation Records (@Model.Count() cycles)</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0 text-center">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Cycle</th>
+                            <th class="text-start">Field / Plot</th>
+                            <th class="text-start">Planted Crop</th>
+                            <th>Family</th>
+                            <th>Planting &amp; Harvest</th>
+                            <th>Status</th>
+                            <th>Rotation Score</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="8" class="py-5 text-muted">
+                                    <p class="fs-5 mb-1">No rotation cycles found matching criteria.</p>
+                                    <a asp-action="Create" class="btn btn-agri btn-sm mt-2">Plan a New Rotation</a>
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="fw-bold">@item.SeasonYear</td>
+                                    <td class="text-start">
+                                        <a asp-controller="Fields" asp-action="Details" asp-route-id="@item.FieldId" class="text-decoration-none fw-semibold text-agri">
+                                            @item.Field?.PlotName
+                                        </a>
+                                        <div class="small text-muted">@item.Field?.SoilType &bull; @item.Field?.AreaInAcres Ac</div>
+                                    </td>
+                                    <td class="text-start">
+                                        <a asp-controller="Crops" asp-action="Details" asp-route-id="@item.CropId" class="text-decoration-none text-dark fw-bold">
+                                            @item.Crop?.CropName
+                                        </a>
+                                        <div class="small text-muted">@item.Crop?.Season</div>
+                                    </td>
+                                    <td>
+                                        <span class="badge @(item.Crop?.Family?.Contains("Legumes") == true ? "bg-success" : "bg-secondary")">
+                                            @item.Crop?.Family
+                                        </span>
+                                    </td>
+                                    <td class="small">
+                                        <div><strong>Sown:</strong> @item.PlantingDate.ToString("dd MMM yyyy")</div>
+                                        <div><strong>Harvest:</strong> @item.ExpectedHarvestDate.ToString("dd MMM yyyy")</div>
+                                    </td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm dropdown-toggle @(item.Status == "In Progress" ? "btn-warning text-dark" : item.Status == "Harvested" ? "btn-success" : "btn-info text-dark")" type="button" data-bs-toggle="dropdown">
+                                                @item.Status
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <form asp-action="UpdateStatus" method="post">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="id" value="@item.Id" />
+                                                        <input type="hidden" name="newStatus" value="Planned" />
+                                                        <button type="submit" class="dropdown-item">Mark as Planned</button>
+                                                    </form>
+                                                </li>
+                                                <li>
+                                                    <form asp-action="UpdateStatus" method="post">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="id" value="@item.Id" />
+                                                        <input type="hidden" name="newStatus" value="In Progress" />
+                                                        <button type="submit" class="dropdown-item">Mark as In Progress</button>
+                                                    </form>
+                                                </li>
+                                                <li>
+                                                    <form asp-action="UpdateStatus" method="post">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="id" value="@item.Id" />
+                                                        <input type="hidden" name="newStatus" value="Harvested" />
+                                                        <button type="submit" class="dropdown-item">Mark as Harvested</button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge @(item.RotationBenefitScore >= 90 ? "bg-success" : item.RotationBenefitScore >= 75 ? "bg-primary" : "bg-warning text-dark") fs-7">
+                                            @item.RotationBenefitScore%
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info">Details</a>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning">Edit</a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">Delete</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,123 @@
+@model IEnumerable<CropRotation_164.Models.Crop>
+@{
+    ViewData["Title"] = "Crops Master Catalog";
+}
+
+<div class="container py-4">
+    <!-- Header Card -->
+    <div class="card shadow-sm border-0 mb-4 bg-agri rounded-3">
+        <div class="card-body p-4 text-center">
+            <h1 class="display-6 fw-bold mb-2">Crops Master Catalog</h1>
+            <p class="lead mb-0">Agronomic database of crop botanical families, nutrient demands, and seasonal cycles</p>
+        </div>
+    </div>
+
+    <!-- Alert Notifications -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm mb-4" role="alert">
+            <span class="fs-5 me-2">✓</span> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm mb-4" role="alert">
+            <span class="fs-5 me-2">⚠</span> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Toolbar: Filter & Add -->
+    <div class="card shadow-sm border-0 mb-4 bg-white">
+        <div class="card-body">
+            <div class="row g-3 align-items-center justify-content-between">
+                <div class="col-md-8">
+                    <form asp-action="Index" method="get" class="row g-2">
+                        <div class="col-md-5">
+                            <select name="family" class="form-select">
+                                <option value="">-- All Botanical Families --</option>
+                                <option value="Legumes">Legumes (Fabaceae - Nitrogen Fixers)</option>
+                                <option value="Cereals">Cereals (Poaceae - Heavy Feeders)</option>
+                                <option value="Cruciferous">Cruciferous (Brassicaceae - Pest Breakers)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <select name="season" class="form-select">
+                                <option value="">-- All Seasons --</option>
+                                <option value="Kharif">Kharif (Monsoon)</option>
+                                <option value="Rabi">Rabi (Winter)</option>
+                                <option value="Zaid">Zaid (Summer)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-auto">
+                            <button type="submit" class="btn btn-outline-success">Filter</button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">Reset</a>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-auto text-end">
+                    <a asp-action="Create" class="btn btn-agri fw-bold px-4">
+                        + Register New Crop
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Crops Grid / Table -->
+    <div class="card shadow-sm border-0 bg-white">
+        <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold">Crop Varieties (@Model.Count() registered)</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0 text-center">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th class="text-start">Crop Name</th>
+                            <th>Botanical Family</th>
+                            <th>Season</th>
+                            <th>Nutrient Demand / Role</th>
+                            <th>Duration</th>
+                            <th>Est. Yield / Acre</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var crop in Model)
+                        {
+                            <tr>
+                                <td class="fw-bold">@crop.Id</td>
+                                <td class="text-start">
+                                    <a asp-action="Details" asp-route-id="@crop.Id" class="fw-bold text-decoration-none text-agri fs-6">
+                                        @crop.CropName
+                                    </a>
+                                </td>
+                                <td>
+                                    <span class="badge @(crop.Family.Contains("Legumes") ? "bg-success" : crop.Family.Contains("Cereals") ? "bg-warning text-dark" : "bg-info text-dark")">
+                                        @crop.Family
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark border">@crop.Season</span>
+                                </td>
+                                <td class="small text-muted">@crop.NutrientDemand</td>
+                                <td><strong>@crop.DurationInDays</strong> days</td>
+                                <td class="small">@crop.EstimatedYieldPerAcre</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-action="Details" asp-route-id="@crop.Id" class="btn btn-outline-info">Details</a>
+                                        <a asp-action="Edit" asp-route-id="@crop.Id" class="btn btn-outline-warning">Edit</a>
+                                        <a asp-action="Delete" asp-route-id="@crop.Id" class="btn btn-outline-danger">Delete</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

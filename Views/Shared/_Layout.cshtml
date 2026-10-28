@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AgriCrop Rotation 164</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        :root {
+            --agri-green: #2d6a4f;
+            --agri-dark: #1b4332;
+            --agri-light: #d8f3dc;
+            --agri-accent: #52b788;
+        }
+        .navbar-agri {
+            background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%);
+        }
+        .bg-agri { background-color: var(--agri-green) !important; color: white !important; }
+        .text-agri { color: var(--agri-green) !important; }
+        .btn-agri {
+            background-color: var(--agri-green);
+            color: #fff;
+            border: none;
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-agri:hover {
+            background-color: var(--agri-dark);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+        .card-kpi {
+            border-radius: 12px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-kpi:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+        }
+    </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-agri shadow-sm py-2">
+            <div class="container-fluid px-4">
+                <a class="navbar-brand fw-bold d-flex align-items-center" asp-controller="Home" asp-action="Index">
+                    <span class="fs-3 me-2">🌱</span>
+                    <span>AgriRotate <small class="badge bg-warning text-dark fs-8 ms-1">164</small></span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 fw-semibold">
+                        <li class="nav-item">
+                            <a class="nav-link px-3" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3" asp-controller="Fields" asp-action="Index">
+                                <i class="bi bi-geo-alt me-1"></i> Farm Fields (Plots)
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3" asp-controller="Crops" asp-action="Index">
+                                <i class="bi bi-flower1 me-1"></i> Crops Master
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3" asp-controller="RotationPlans" asp-action="Index">
+                                <i class="bi bi-arrow-repeat me-1"></i> Crop Rotation Cycles
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 text-warning" asp-controller="Home" asp-action="Advisory">
+                                <i class="bi bi-lightbulb me-1"></i> Scientific Advisory
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-light text-dark shadow-sm py-2 px-3">
+                            <i class="bi bi-database-check text-success me-1"></i> MySQL Connected
+                        </span>
+                        <a asp-controller="RotationPlans" asp-action="Create" class="btn btn-warning btn-sm fw-bold">
+                            + Plan Rotation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="flex-grow-1">
+        <main role="main" class="pb-4">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-white border-top shadow-sm">
+        <div class="container text-center text-muted small">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-md-start">
+                    <strong>AgriRotate Management System</strong> &bull; ASP.NET Core MVC &bull; EF Core &bull; MySQL
+                </div>
+                <div class="col-md-6 text-md-end">
+                    Developed for Mini-Project &bull; Student Roll No: <strong>164</strong>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,22 @@
+## Visual Studio / .NET Core
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+.vs/
+.vscode/
+*.swp
+*.*~
+.DS_Store
+
+## Build results
+[Tt]emp/
+_ReSharper*/
+*.dotCover
+
+## Logs
+*.log

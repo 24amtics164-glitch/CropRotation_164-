@@ -1,0 +1,119 @@
+@model CropRotation_164.Models.RotationPlan
+@{
+    ViewData["Title"] = "Schedule New Crop Rotation";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <!-- Advisory Banner -->
+            <div class="card shadow-sm border-0 border-start border-4 border-warning mb-4 bg-white">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center">
+                        <span class="fs-3 me-3 text-warning">💡</span>
+                        <div>
+                            <strong class="text-dark">Intelligent Agronomic Engine:</strong>
+                            <span class="text-muted small">
+                                When selecting a field and crop, our system evaluates the botanical succession. Rotating Legumes with Cereals or Brassicas yields up to 95% soil regeneration scores!
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (ViewBag.RotationWarning != null)
+            {
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> @ViewBag.RotationWarning
+                </div>
+            }
+
+            <div class="card shadow-sm border-0 bg-white">
+                <div class="card-header bg-agri py-3">
+                    <h4 class="mb-0 fw-bold">+ Schedule Crop Rotation Cycle</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post" novalidate>
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <!-- Field Plot & Crop Row -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="FieldId" class="form-label fw-bold"></label>
+                                <select asp-for="FieldId" asp-items="ViewBag.FieldId" class="form-select">
+                                    <option value="">-- Choose Field / Plot --</option>
+                                </select>
+                                <span asp-validation-for="FieldId" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="CropId" class="form-label fw-bold"></label>
+                                <select asp-for="CropId" asp-items="ViewBag.CropId" class="form-select">
+                                    <option value="">-- Choose Crop Variety --</option>
+                                </select>
+                                <span asp-validation-for="CropId" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Season Year & Cycle Status Row -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="SeasonYear" class="form-label fw-bold"></label>
+                                <input asp-for="SeasonYear" class="form-control" placeholder="e.g. 2026-2027 Rabi or 2027 Kharif" />
+                                <span asp-validation-for="SeasonYear" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Status" class="form-label fw-bold"></label>
+                                <select asp-for="Status" class="form-select">
+                                    <option value="Planned">Planned</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Harvested">Harvested</option>
+                                    <option value="Rotated">Rotated</option>
+                                </select>
+                                <span asp-validation-for="Status" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Planting Date & Harvest Date Row -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="PlantingDate" class="form-label fw-bold"></label>
+                                <input asp-for="PlantingDate" type="date" class="form-control" />
+                                <span asp-validation-for="PlantingDate" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="ExpectedHarvestDate" class="form-label fw-bold"></label>
+                                <input asp-for="ExpectedHarvestDate" type="date" class="form-control" />
+                                <span asp-validation-for="ExpectedHarvestDate" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Soil Condition Prior & Recommended Fertilizer Row -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label asp-for="SoilConditionBefore" class="form-label fw-bold"></label>
+                                <input asp-for="SoilConditionBefore" class="form-control" placeholder="e.g. Nitrogen-Enriched by prior legume" />
+                                <span asp-validation-for="SoilConditionBefore" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="RecommendedFertilizer" class="form-label fw-bold"></label>
+                                <input asp-for="RecommendedFertilizer" class="form-control" placeholder="e.g. Bio-NPK Consortium & Vermicompost" />
+                                <span asp-validation-for="RecommendedFertilizer" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button type="submit" class="btn btn-agri px-4 fw-bold">Register Rotation Cycle</button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">Back to Cycles List</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

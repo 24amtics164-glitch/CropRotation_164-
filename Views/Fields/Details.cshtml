@@ -1,0 +1,98 @@
+@model CropRotation_164.Models.Field
+@{
+    ViewData["Title"] = "Field Plot Profile - " + Model.PlotName;
+}
+
+<div class="container py-4">
+    <div class="card shadow-sm border-0 border-top border-4 border-success mb-4 bg-white">
+        <div class="card-header bg-light py-3 d-flex justify-content-between align-items-center">
+            <h4 class="mb-0 fw-bold text-success">
+                <i class="bi bi-geo-alt-fill me-2"></i>@Model.PlotName
+            </h4>
+            <span class="badge bg-secondary fs-6">Field ID: #@Model.Id</span>
+        </div>
+        <div class="card-body p-4">
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="p-3 bg-light rounded text-center">
+                        <div class="text-muted small text-uppercase fw-bold">Total Area</div>
+                        <div class="display-6 fw-bold text-dark">@Model.AreaInAcres.ToString("0.0")</div>
+                        <div class="small text-muted">Acres</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 bg-light rounded text-center">
+                        <div class="text-muted small text-uppercase fw-bold">Soil Classification</div>
+                        <div class="fs-5 fw-bold text-primary mt-2">@Model.SoilType</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 bg-light rounded text-center">
+                        <div class="text-muted small text-uppercase fw-bold">Nutrient State</div>
+                        <div class="fs-6 fw-bold text-success mt-2">@Model.CurrentNutrientStatus</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 bg-light rounded text-center">
+                        <div class="text-muted small text-uppercase fw-bold">Sector Location</div>
+                        <div class="small fw-semibold text-muted mt-2">@Model.Location</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rotation History on this Field -->
+            <h5 class="fw-bold mb-3 border-bottom pb-2">
+                <i class="bi bi-arrow-repeat me-1 text-agri"></i>Rotation History &amp; Planned Cycles
+            </h5>
+
+            @if (!Model.RotationPlans.Any())
+            {
+                <div class="alert alert-info small">
+                    No rotation cycles scheduled on this field yet.
+                    <a asp-controller="RotationPlans" asp-action="Create" class="fw-bold">Schedule one now &rarr;</a>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover align-middle mb-0 text-center">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Cycle</th>
+                                <th>Crop Planted</th>
+                                <th>Botanical Family</th>
+                                <th>Planting</th>
+                                <th>Expected Harvest</th>
+                                <th>Status</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var plan in Model.RotationPlans.OrderByDescending(r => r.PlantingDate))
+                            {
+                                <tr>
+                                    <td class="fw-bold">@plan.SeasonYear</td>
+                                    <td><strong>@plan.Crop?.CropName</strong></td>
+                                    <td><span class="badge bg-secondary">@plan.Crop?.Family</span></td>
+                                    <td>@plan.PlantingDate.ToString("dd MMM yyyy")</td>
+                                    <td>@plan.ExpectedHarvestDate.ToString("dd MMM yyyy")</td>
+                                    <td>
+                                        <span class="badge @(plan.Status == "In Progress" ? "bg-warning text-dark" : plan.Status == "Harvested" ? "bg-success" : "bg-info text-dark")">
+                                            @plan.Status
+                                        </span>
+                                    </td>
+                                    <td><span class="badge bg-success">@plan.RotationBenefitScore%</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            <div class="d-flex justify-content-between pt-4 mt-3 border-top">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning px-4 fw-bold">Edit Field</a>
+                <a asp-action="Index" class="btn btn-outline-secondary">Back to Field List</a>
+            </div>
+        </div>
+    </div>
+</div>

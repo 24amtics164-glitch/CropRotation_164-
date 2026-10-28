@@ -1,0 +1,268 @@
+@model CropRotation_164.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Farm Executive Dashboard";
+}
+
+<div class="container-fluid px-4 py-4">
+    <!-- Hero / Welcome Banner -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4 text-white overflow-hidden" style="background: linear-gradient(120deg, #1b4332 0%, #2d6a4f 60%, #40916c 100%);">
+        <div class="card-body p-4 p-lg-5">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <span class="badge bg-warning text-dark px-3 py-2 fw-bold text-uppercase mb-2">Sustainable Agriculture Suite</span>
+                    <h1 class="display-6 fw-bold mb-2">Crop Rotation &amp; Soil Management System</h1>
+                    <p class="lead mb-3 text-light opacity-90">
+                        Optimize multi-season crop yields, naturally enrich soil nutrients, and disrupt pest cycles through scientific crop succession.
+                    </p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a asp-controller="RotationPlans" asp-action="Create" class="btn btn-warning fw-bold px-4">
+                            <i class="bi bi-calendar-plus me-1"></i> Plan New Rotation Cycle
+                        </a>
+                        <a asp-controller="Fields" asp-action="Create" class="btn btn-outline-light px-3">
+                            <i class="bi bi-plus-circle me-1"></i> Add Farm Field
+                        </a>
+                        <a asp-controller="Home" asp-action="Advisory" class="btn btn-link text-white text-decoration-none px-2">
+                            <i class="bi bi-journal-text me-1"></i> View Agronomic Guide &rarr;
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center d-none d-lg-block">
+                    <div class="p-3 bg-white bg-opacity-10 rounded-4 text-center">
+                        <div class="display-4 fw-bold text-warning mb-0">@Model.AverageSoilHealthScore%</div>
+                        <div class="text-uppercase small fw-semibold tracking-wide">Average Rotation Health Index</div>
+                        <div class="progress mt-3 bg-white bg-opacity-25" style="height: 8px;">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: @Model.AverageSoilHealthScore%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- State Management Flash Notification -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm border-0 border-start border-4 border-success mb-4" role="alert">
+            <div class="d-flex align-items-center">
+                <span class="fs-4 me-2">✓</span>
+                <div>@TempData["SuccessMessage"]</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- 4 KPI Metrics Row -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="card card-kpi shadow-sm border-0 bg-white p-3">
+                <div class="d-flex align-items-center">
+                    <div class="rounded-3 p-3 bg-primary bg-opacity-10 text-primary me-3">
+                        <i class="bi bi-geo-alt fs-2"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase">Total Farm Plots</div>
+                        <h3 class="fw-bold mb-0">@Model.TotalFields <small class="fs-6 text-muted fw-normal">(@Model.TotalFarmAcres Acres)</small></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card card-kpi shadow-sm border-0 bg-white p-3">
+                <div class="d-flex align-items-center">
+                    <div class="rounded-3 p-3 bg-success bg-opacity-10 text-success me-3">
+                        <i class="bi bi-flower1 fs-2"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase">Registered Crops</div>
+                        <h3 class="fw-bold mb-0">@Model.TotalCrops <small class="fs-6 text-muted fw-normal">varieties</small></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card card-kpi shadow-sm border-0 bg-white p-3">
+                <div class="d-flex align-items-center">
+                    <div class="rounded-3 p-3 bg-warning bg-opacity-10 text-warning me-3">
+                        <i class="bi bi-arrow-repeat fs-2"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase">Active Rotations</div>
+                        <h3 class="fw-bold mb-0">@Model.ActiveRotations <small class="fs-6 text-muted fw-normal">in progress</small></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card card-kpi shadow-sm border-0 bg-white p-3">
+                <div class="d-flex align-items-center">
+                    <div class="rounded-3 p-3 bg-info bg-opacity-10 text-info me-3">
+                        <i class="bi bi-check2-circle fs-2"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase">Completed Cycles</div>
+                        <h3 class="fw-bold mb-0">@Model.HarvestedCycles <small class="fs-6 text-muted fw-normal">harvested</small></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- State Management Season Filter Bar (Session Demonstration) -->
+    <div class="card shadow-sm border-0 mb-4 bg-white">
+        <div class="card-body p-3">
+            <form asp-action="SetSeasonFilter" method="post" class="row g-2 align-items-center">
+                @Html.AntiForgeryToken()
+                <div class="col-md-auto fw-bold text-muted small text-uppercase">
+                    <i class="bi bi-funnel me-1"></i> Filter By Active Season (Session):
+                </div>
+                <div class="col-md-4">
+                    <select name="seasonFilter" class="form-select form-select-sm">
+                        <option value="All Seasons" selected="@(Model.CurrentSeasonFilter == "All Seasons")">All Seasons</option>
+                        <option value="Kharif" selected="@(Model.CurrentSeasonFilter == "Kharif")">Kharif (Monsoon / Rainfed)</option>
+                        <option value="Rabi" selected="@(Model.CurrentSeasonFilter == "Rabi")">Rabi (Winter Season)</option>
+                        <option value="Zaid" selected="@(Model.CurrentSeasonFilter == "Zaid")">Zaid (Summer Short Season)</option>
+                    </select>
+                </div>
+                <div class="col-md-auto">
+                    <button type="submit" class="btn btn-agri btn-sm px-3">Apply Filter</button>
+                </div>
+                <div class="col text-md-end text-muted small">
+                    Current Filter in Session: <span class="badge bg-secondary">@Model.CurrentSeasonFilter</span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="row g-4 mb-4">
+        <!-- Rotation Schedules Table -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 h-100 bg-white">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom">
+                    <h5 class="fw-bold mb-0 text-dark">
+                        <i class="bi bi-calendar4-week text-agri me-2"></i>Recent Crop Rotation Cycles
+                    </h5>
+                    <a asp-controller="RotationPlans" asp-action="Index" class="btn btn-outline-success btn-sm">
+                        View All Cycles &rarr;
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0 text-center">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="text-start">Field / Plot</th>
+                                    <th class="text-start">Crop</th>
+                                    <th>Season</th>
+                                    <th>Planting Date</th>
+                                    <th>Status</th>
+                                    <th>Score</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.UpcomingRotations)
+                                {
+                                    <tr>
+                                        <td class="text-start fw-bold">
+                                            <a asp-controller="Fields" asp-action="Details" asp-route-id="@item.FieldId" class="text-decoration-none">
+                                                @item.Field?.PlotName
+                                            </a>
+                                            <div class="small text-muted">@item.Field?.SoilType</div>
+                                        </td>
+                                        <td class="text-start">
+                                            <span class="fw-semibold">@item.Crop?.CropName</span>
+                                            <div class="small text-muted">@item.Crop?.Family</div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-light text-dark border">@item.SeasonYear</span>
+                                        </td>
+                                        <td class="small">
+                                            @item.PlantingDate.ToString("dd MMM yyyy")
+                                        </td>
+                                        <td>
+                                            @if (item.Status == "In Progress")
+                                            {
+                                                <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Active</span>
+                                            }
+                                            else if (item.Status == "Harvested")
+                                            {
+                                                <span class="badge bg-success"><i class="bi bi-check2-circle me-1"></i>Harvested</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-info text-dark"><i class="bi bi-clock me-1"></i>Planned</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <span class="badge @(item.RotationBenefitScore >= 90 ? "bg-success" : "bg-primary")">
+                                                @item.RotationBenefitScore%
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a asp-controller="RotationPlans" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">
+                                                Details
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar: Registered Crops & Soil Profiles -->
+        <div class="col-lg-4">
+            <!-- Soil Nutrient Health Card -->
+            <div class="card shadow-sm border-0 mb-4 bg-white">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h5 class="fw-bold mb-0 text-dark">
+                        <i class="bi bi-layers text-agri me-2"></i>Field Soil Health Status
+                    </h5>
+                </div>
+                <div class="card-body p-3">
+                    <div class="list-group list-group-flush">
+                        @foreach (var field in Model.FieldsSummary)
+                        {
+                            <div class="list-group-item px-0 py-2 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong class="text-dark">@field.PlotName</strong>
+                                    <div class="small text-muted">@field.SoilType &bull; @field.AreaInAcres Ac</div>
+                                </div>
+                                <span class="badge bg-light text-dark border text-truncate" style="max-width: 140px;">
+                                    @field.CurrentNutrientStatus
+                                </span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Crops Catalog Quick View -->
+            <div class="card shadow-sm border-0 bg-white">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom">
+                    <h5 class="fw-bold mb-0 text-dark">
+                        <i class="bi bi-basket text-agri me-2"></i>Crop Catalog
+                    </h5>
+                    <a asp-controller="Crops" asp-action="Index" class="btn btn-outline-secondary btn-sm">All Crops</a>
+                </div>
+                <div class="card-body p-3">
+                    <ul class="list-unstyled mb-0 small">
+                        @foreach (var crop in Model.TopCrops)
+                        {
+                            <li class="mb-2 pb-2 border-bottom d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>@crop.CropName</strong>
+                                    <div class="text-muted">@crop.Family</div>
+                                </div>
+                                <span class="badge bg-success bg-opacity-10 text-success">@crop.Season</span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

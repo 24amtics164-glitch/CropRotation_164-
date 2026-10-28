@@ -1,0 +1,92 @@
+@model CropRotation_164.Models.Crop
+@{
+    ViewData["Title"] = "Edit Crop - " + Model.CropName;
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 bg-white">
+                <div class="card-header bg-warning text-dark py-3">
+                    <h4 class="mb-0 fw-bold">✎ Edit Crop Profile: @Model.CropName</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit" method="post" novalidate>
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="Id" />
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <!-- Crop Name -->
+                        <div class="mb-3">
+                            <label asp-for="CropName" class="form-label fw-bold"></label>
+                            <input asp-for="CropName" class="form-control" />
+                            <span asp-validation-for="CropName" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Botanical Family & Season Row -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="Family" class="form-label fw-bold"></label>
+                                <select asp-for="Family" class="form-select">
+                                    <option value="Legumes (Fabaceae)">Legumes (Fabaceae - Nitrogen Fixer)</option>
+                                    <option value="Cereals (Poaceae)">Cereals (Poaceae - Heavy Feeder)</option>
+                                    <option value="Cruciferous (Brassicaceae)">Cruciferous (Brassicaceae - Pest Breaker)</option>
+                                    <option value="Solanaceae (Nightshade)">Solanaceae (Nightshade)</option>
+                                    <option value="Cucurbitaceae (Gourds)">Cucurbitaceae (Gourds)</option>
+                                </select>
+                                <span asp-validation-for="Family" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Season" class="form-label fw-bold"></label>
+                                <select asp-for="Season" class="form-select">
+                                    <option value="Kharif (Monsoon)">Kharif (Monsoon)</option>
+                                    <option value="Rabi (Winter)">Rabi (Winter)</option>
+                                    <option value="Zaid (Summer)">Zaid (Summer)</option>
+                                    <option value="Perennial / Annual">Perennial / Annual</option>
+                                </select>
+                                <span asp-validation-for="Season" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Nutrient Demand -->
+                        <div class="mb-3">
+                            <label asp-for="NutrientDemand" class="form-label fw-bold"></label>
+                            <select asp-for="NutrientDemand" class="form-select">
+                                <option value="Nitrogen Fixing (Soil Enricher)">Nitrogen Fixing (Soil Enricher)</option>
+                                <option value="High Nitrogen Consumer">High Nitrogen Consumer</option>
+                                <option value="Heavy Nutrient Feeder">Heavy Nutrient Feeder</option>
+                                <option value="Deep Root Feeder / Scavenger">Deep Root Feeder / Scavenger</option>
+                                <option value="Biofumigant / Nematode Suppressor">Biofumigant / Nematode Suppressor</option>
+                            </select>
+                            <span asp-validation-for="NutrientDemand" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Duration & Yield Row -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label asp-for="DurationInDays" class="form-label fw-bold"></label>
+                                <input asp-for="DurationInDays" type="number" min="30" max="365" class="form-control" />
+                                <span asp-validation-for="DurationInDays" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="EstimatedYieldPerAcre" class="form-label fw-bold"></label>
+                                <input asp-for="EstimatedYieldPerAcre" class="form-control" />
+                                <span asp-validation-for="EstimatedYieldPerAcre" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button type="submit" class="btn btn-warning px-4 fw-bold">Update Crop Details</button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">Back to Crops List</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
