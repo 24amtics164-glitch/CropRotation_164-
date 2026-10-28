@@ -74,3 +74,4 @@ Open your browser and navigate to:
 
 ## 📄 License
 Academic Mini-Project Submission.
+
